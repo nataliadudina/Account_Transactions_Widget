@@ -2,10 +2,10 @@ import json
 from datetime import datetime
 
 
-def load_card_transactions():
+def load_card_transactions(file_name='operations.json'):
     """Считывает данные из файла, возвращает список всех операций по карте"""
 
-    with open('operations.json', 'r', encoding='utf-8') as file:
+    with open(file_name, 'r', encoding='utf-8') as file:
         transactions = json.loads(file.read())
     return transactions
 
@@ -56,9 +56,9 @@ def date_key(dictionary):
     return datetime.strptime(dictionary["date"], '%d.%m.%Y')
 
 
-def sorted_transactions_with_formatted_data():
+def sorted_transactions_with_formatted_data(data):
     """Заменяет формат данных на требуемый, сортирует и возвращает изменённый список"""
-    data = load_card_transactions()
+
     transactions = []
 
     for transaction in data:
@@ -76,10 +76,10 @@ def sorted_transactions_with_formatted_data():
     return sorted_data
 
 
-def executed_transactions():
+def executed_transactions(data):
     """Возвращает список исполненных операций"""
 
-    sorted_data = sorted_transactions_with_formatted_data()
+    sorted_data = sorted_transactions_with_formatted_data(data)
     executed = []
 
     for item in sorted_data:

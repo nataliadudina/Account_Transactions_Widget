@@ -1,9 +1,9 @@
-from src.utils import executed_transactions, format_and_print_transaction
+from src.utils import executed_transactions, format_and_print_transaction, load_card_transactions
 
 
 def main():
-
-    last_transactions = executed_transactions()[:5]
+    data = load_card_transactions()
+    last_transactions = executed_transactions(data=data)[:5]
 
     # Вывод пяти последних исполненных операций
     for item in last_transactions:
