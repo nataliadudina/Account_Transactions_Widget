@@ -1,5 +1,5 @@
 from src.utils import format_date, masked_card_number, masked_account_number, date_key, \
-    format_and_print_transaction
+    format_and_print_transaction, sorted_transactions_with_formatted_data
 
 import pytest
 
@@ -93,3 +93,63 @@ def test_format_and_print_transaction(example_transaction, capsys):
     format_and_print_transaction(example_transaction[0])
     captured = capsys.readouterr()
     assert captured.out == expected_output
+
+
+def test_sorted_transactions_with_formatted_data(example_transaction, capsys):
+    assert type(sorted_transactions_with_formatted_data(data=example_transaction)) == list
+    res = sorted_transactions_with_formatted_data(data=[{
+        "id": 811920303,
+        "state": "EXECUTED",
+        "date": "2019-05-14T19:37:49.044089",
+        "operationAmount": {
+            "amount": "63150.74",
+            "currency": {
+                "name": "USD",
+                "code": "USD"
+            }
+        },
+        "description": "Перевод со счета на счет",
+        "from": "Счет 73222753239048295679",
+        "to": "Счет 78544755774551298747"
+    }, {
+        "id": 811920303,
+        "state": "EXECUTED",
+        "date": "2019-06-14T19:37:49.044089",
+        "operationAmount": {
+            "amount": "63150.74",
+            "currency": {
+                "name": "USD",
+                "code": "USD"
+            }
+        },
+        "description": "Перевод со счета на счет",
+        "from": "Счет 73222753239048295679",
+        "to": "Счет 78544755774551298747"
+    }])
+    for i in res:
+        assert i.keys() == {
+            "id",
+            "state",
+            "date",
+            "operationAmount",
+            "description",
+            "from",
+            "to"
+        }
+
+    assert res == [{'date': '14.06.2019',
+                    'description': 'Перевод со счета на счет',
+                    'from': 'Счет **5679',
+                    'id': 811920303,
+                    'operationAmount': {'amount': '63150.74',
+                                        'currency': {'code': 'USD', 'name': 'USD'}},
+                    'state': 'EXECUTED',
+                    'to': 'Счет **8747'},
+                   {'date': '14.05.2019',
+                    'description': 'Перевод со счета на счет',
+                    'from': 'Счет **5679',
+                    'id': 811920303,
+                    'operationAmount': {'amount': '63150.74',
+                                        'currency': {'code': 'USD', 'name': 'USD'}},
+                    'state': 'EXECUTED',
+                    'to': 'Счет **8747'}]
